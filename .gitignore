@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+pip_log.txt
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Visual Studio
+.vs/
+*.code-workspace
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# macOS
+.DS_Store
+
+# Azure-specific
+*.publishsettings
