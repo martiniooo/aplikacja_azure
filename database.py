@@ -1,7 +1,7 @@
 import os
 import pyodbc
 
-connection_string = os.getenv("DATABASE_URL", "Driver={ODBC Driver 18 for SQL Server};Server=tcp:expenses-server-123.database.windows.net,1433;Database=ExpensesDB;Uid=admin1;Pwd=Serwerazure!;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+connection_string = os.getenv("DATABASE_URL", "Driver={ODBC Driver 18 for SQL Server};Server=tcp:expenses-server-123.database.windows.net,1433;Database=ExpensesDB;Uid=admn1;Pwd=Serwerazure!;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
 
 def init_db():
     conn = pyodbc.connect(connection_string)
