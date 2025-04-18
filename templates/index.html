@@ -10,12 +10,16 @@
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #0078d4; color: white; }
         form { margin: 20px 0; }
-        .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; }
+        .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; display: inline-block; }
+        .edit-btn { padding: 8px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .edit-btn:hover { background-color: #218838; }
+        .delete-btn { padding: 8px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .delete-btn:hover { background-color: #c82333; }
     </style>
 </head>
 <body>
     <h1>Lista wydatków domowych</h1>
-    <form method="POST" action="/add">
+    <form method="POST" action="{{ url_for('add_expense') }}">
         <label>Data: <input type="date" name="date" required></label>
         <label>Kategoria: 
             <select name="category" required>
@@ -27,21 +31,28 @@
         <label>Kwota: <input type="number" step="0.01" name="amount" required></label>
         <button type="submit">Dodaj wydatek</button>
     </form>
-    <a href="/summary/weekly" class="button">Podsumowanie tygodniowe</a>
-    <a href="/summary/monthly" class="button">Podsumowanie miesięczne</a>
-    <a href="/export" class="button">Eksportuj dane</a>
+    <a href="{{ url_for('summary', period='weekly') }}" class="button">Podsumowanie tygodniowe</a>
+    <a href="{{ url_for('summary', period='monthly') }}" class="button">Podsumowanie miesięczne</a>
+    <a href="{{ url_for('export') }}" class="button">Eksportuj dane</a>
     <h2>Wydatki</h2>
     <table>
         <tr>
             <th>Data</th>
             <th>Kategoria</th>
             <th>Kwota</th>
+            <th>Akcje</th>
         </tr>
         {% for expense in expenses %}
         <tr>
-            <td>{{ expense.date }}</td>
+            <td>{{ expense.date.strftime('%Y-%m-%d') }}</td>
             <td>{{ expense.category }}</td>
-            <td>{{ expense.amount }}</td>
+            <td>{{ expense.amount|round(2) }} zł</td>
+            <td>
+                <a href="{{ url_for('edit_expense', id=expense.id) }}"><button class="edit-btn">Edytuj</button></a>
+                <form action="{{ url_for('delete_expense', id=expense.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="delete-btn" onclick="return confirm('Czy na pewno chcesz usunąć ten wydatek?')">Usuń</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
