@@ -9,7 +9,8 @@
         table { width: 50%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #0078d4; color: white; }
-        .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; }
+        .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; display: inline-block; }
+        #chartContainer { width: 80%; margin: 20px auto; }
     </style>
 </head>
 <body>
@@ -22,10 +23,36 @@
         {% for item in summary %}
         <tr>
             <td>{{ item.category }}</td>
-            <td>{{ item.total }}</td>
+            <td>{{ item.total|round(2) }} zł</td>
         </tr>
         {% endfor %}
     </table>
-    <a href="/" class="button">Powrót</a>
+    <div id="chartContainer">
+        <canvas id="expensesChart"></canvas>
+    </div>
+    <a href="{{ url_for('home') }}" class="button">Powrót</a>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('expensesChart').getContext('2d');
+        const chartData = {
+            labels: [{% if summary %}{% for item in summary %}'{{ item.category }}',{% endfor %}{% else %}[]{% endif %}],
+            datasets: [{
+                label: 'Wydatki (zł)',
+                data: [{% if summary %}{% for item in summary %}{{ item.total }},{% endfor %}{% else %}[]{% endif %}],
+                backgroundColor: 'rgba(0, 120, 212, 0.5)',
+                borderColor: 'rgba(0, 120, 212, 1)',
+                borderWidth: 1
+            }]
+        };
+        new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
