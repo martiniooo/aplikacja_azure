@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Podsumowanie {{ period }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f0f0f0; }
+        h1 { color: #0078d4; }
+        table { width: 50%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #0078d4; color: white; }
+        .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Podsumowanie {{ period }}</h1>
+    <table>
+        <tr>
+            <th>Kategoria</th>
+            <th>Suma</th>
+        </tr>
+        {% for item in summary %}
+        <tr>
+            <td>{{ item.category }}</td>
+            <td>{{ item.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/" class="button">Powrót</a>
+</body>
+</html>
