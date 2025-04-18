@@ -7,7 +7,6 @@ from database import init_db, get_db_connection
 
 app = Flask(__name__)
 
-# Inicjalizacja bazy danych
 init_db()
 
 @app.route('/')
@@ -16,7 +15,7 @@ def home():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM Expenses ORDER BY date DESC")
     expenses = cursor.fetchall()
-    cursor.execute("SELECT * FROM Categories")
+    cursor.execute("SELECT name FROM Categories")
     categories = [row.name for row in cursor.fetchall()]
     conn.close()
     return render_template('index.html', expenses=expenses, categories=categories)
@@ -33,6 +32,34 @@ def add_expense():
     conn.close()
     return redirect(url_for('home'))
 
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_expense(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    if request.method == 'POST':
+        date = request.form['date']
+        category = request.form['category']
+        amount = float(request.form['amount'])
+        cursor.execute("UPDATE Expenses SET date = ?, category = ?, amount = ? WHERE id = ?", (date, category, amount, id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('home'))
+    cursor.execute("SELECT * FROM Expenses WHERE id = ?", (id,))
+    expense = cursor.fetchone()
+    cursor.execute("SELECT name FROM Categories")
+    categories = [row.name for row in cursor.fetchall()]
+    conn.close()
+    return render_template('edit_expense.html', expense=expense, categories=categories)
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete_expense(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM Expenses WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('home'))
+
 @app.route('/summary/<period>')
 def summary(period):
     conn = get_db_connection()
@@ -41,9 +68,11 @@ def summary(period):
     if period == 'weekly':
         start_date = today - timedelta(days=today.weekday())
         end_date = start_date + timedelta(days=6)
-    else:  # monthly
+        title = 'tygodniowe'
+    else:  
         start_date = today.replace(day=1)
         end_date = (today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+        title = 'miesięczne'
     
     cursor.execute("""
         SELECT category, SUM(amount) as total 
@@ -53,7 +82,7 @@ def summary(period):
     """, (start_date, end_date))
     summary_data = cursor.fetchall()
     conn.close()
-    return render_template('summary.html', summary=summary_data, period=period)
+    return render_template('summary.html', summary=summary_data, period=title)
 
 @app.route('/export')
 def export():
