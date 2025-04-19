@@ -7,12 +7,10 @@ from database import init_db, get_db_connection
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = 'super_secret_key_123'  # Klucz do sesji (zmień na losowy ciąg w produkcji)
+app.secret_key = 'super_secret_key_123' 
 
-# Inicjalizacja bazy danych
 init_db()
 
-# Sprawdzanie, czy użytkownik jest zalogowany
 def login_required(f):
     def wrap(*args, **kwargs):
         if 'user_id' not in session:
@@ -44,7 +42,7 @@ def login():
         cursor.execute("SELECT * FROM Users WHERE username = ?", (username,))
         user = cursor.fetchone()
         conn.close()
-        if user and password == user.password:  # W produkcji: check_password_hash(user.password, password)
+        if user and password == user.password:
             session['user_id'] = user.id
             session['username'] = user.username
             flash('Zalogowano pomyślnie!', 'success')
@@ -61,7 +59,6 @@ def register():
         conn = get_db_connection()
         cursor = conn.cursor()
         try:
-            # W produkcji: password = generate_password_hash(password)
             cursor.execute("INSERT INTO Users (username, password) VALUES (?, ?)", (username, password))
             conn.commit()
             flash('Rejestracja zakończona sukcesem! Proszę się zalogować.', 'success')
@@ -136,7 +133,7 @@ def summary(period):
         start_date = today - timedelta(days=today.weekday())
         end_date = start_date + timedelta(days=6)
         title = 'tygodniowe'
-    else:  # monthly
+    else:  
         start_date = today.replace(day=1)
         end_date = (today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
         title = 'miesięczne'
