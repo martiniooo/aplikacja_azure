@@ -3,52 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <title>Edytuj wydatek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { 
-            font-family: Arial, sans-serif; 
-            margin: 20px; 
+            font-family: 'Roboto', sans-serif; 
+            margin: 0; 
             background-image: url('/static/Apkatło.png');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
+            position: relative;
+            color: #333;
         }
-        h1 { color: #0078d4; }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1); /* Delikatny overlay dla lepszej czytelności */
+            z-index: -1;
+        }
+        .navbar {
+            background-color: #4B0082; /* Ciemniejszy fiolet */
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .navbar h3 {
+            color: white;
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #6A5ACD; /* Jasny fiolet na hover */
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        h1 { 
+            color: #6A5ACD; /* Jasny fiolet dla nagłówków */
+            text-align: center;
+            margin-bottom: 30px;
+        }
         form { 
-            margin: 20px 0; 
-            background-color: rgba(255, 255, 255, 0.85); /* Półprzezroczyste białe tło */
-            padding: 15px; 
-            border-radius: 5px; 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9); /* Półprzezroczyste białe tło */
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
-        .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; display: inline-block; }
-        button { padding: 10px; background-color: #0078d4; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background-color: #005bb5; }
-        .user-info { 
-            margin-bottom: 20px; 
-            background-color: rgba(255, 255, 255, 0.85); /* Półprzezroczyste białe tło */
-            padding: 10px; 
-            border-radius: 5px; 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        form label {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.9em;
+            color: #333;
+        }
+        form input, form select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-size: 1em;
+        }
+        form button {
+            padding: 10px 20px;
+            background-color: #4682B4; /* Stalowy niebieski dla akcji pozytywnych */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        form button:hover {
+            background-color: #4169E1;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #4682B4; /* Stalowy niebieski dla linków */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #4169E1;
         }
     </style>
 </head>
 <body>
-    <div class="user-info">
+    <div class="navbar">
         <h3>Witaj, {{ username }}!</h3>
+        <div>
+            <a href="{{ url_for('home') }}">Powrót do listy</a>
+        </div>
     </div>
-    <h1>Edytuj wydatek</h1>
-    <a href="{{ url_for('home') }}" class="button">Powrót do listy</a>
-    <form method="POST">
-        <label>Data: <input type="date" name="date" value="{{ expense.date.strftime('%Y-%m-%d') }}" required></label>
-        <label>Kategoria: 
-            <select name="category" required>
-                {% for category in categories %}
-                    <option value="{{ category }}" {% if category == expense.category %}selected{% endif %}>{{ category }}</option>
-                {% endfor %}
-            </select>
-        </label>
-        <label>Kwota: <input type="number" step="0.01" name="amount" value="{{ expense.amount }}" required></label>
-        <button type="submit">Zapisz zmiany</button>
-    </form>
+    <div class="container">
+        <h1>Edytuj wydatek</h1>
+        <form method="POST">
+            <label>Data: <input type="date" name="date" value="{{ expense.date.strftime('%Y-%m-%d') }}" required></label>
+            <label>Kategoria: 
+                <select name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if category == expense.category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Kwota: <input type="number" step="0.01" name="amount" value="{{ expense.amount }}" required></label>
+            <button type="submit">Zapisz zmiany</button>
+        </form>
+    </div>
 </body>
 </html>
