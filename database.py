@@ -24,9 +24,8 @@ def init_db():
     """)
     categories = ['Jedzenie', 'Rachunki', 'Transport', 'Rozrywka', 'Inne']
     for category in categories:
-        # Sprawdź, czy kategoria już istnieje
         cursor.execute("SELECT COUNT(*) FROM Categories WHERE name = ?", category)
-        if cursor.fetchone()[0] == 0:  # Jeśli kategoria nie istnieje, dodaj ją
+        if cursor.fetchone()[0] == 0:
             cursor.execute("INSERT INTO Categories (name) VALUES (?)", category)
     conn.commit()
     conn.close()
