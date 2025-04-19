@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Edytuj wydatek</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f0f0f0; }
+        h1 { color: #0078d4; }
+        form { margin: 20px 0; }
+        .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; display: inline-block; }
+        button { padding: 10px; background-color: #0078d4; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #005bb5; }
+    </style>
+</head>
+<body>
+    <h1>Edytuj wydatek</h1>
+    <a href="{{ url_for('home') }}" class="button">Powrót do listy</a>
+    <form method="POST">
+        <label>Data: <input type="date" name="date" value="{{ expense.date.strftime('%Y-%m-%d') }}" required></label>
+        <label>Kategoria: 
+            <select name="category" required>
+                {% for category in categories %}
+                    <option value="{{ category }}" {% if category == expense.category %}selected{% endif %}>{{ category }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Kwota: <input type="number" step="0.01" name="amount" value="{{ expense.amount }}" required></label>
+        <button type="submit">Zapisz zmiany</button>
+    </form>
+</body>
+</html>
