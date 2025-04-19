@@ -4,15 +4,38 @@
     <meta charset="UTF-8">
     <title>Edytuj wydatek</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f0f0f0; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background-image: url('/static/Apkatło.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
         h1 { color: #0078d4; }
-        form { margin: 20px 0; }
+        form { 
+            margin: 20px 0; 
+            background-color: rgba(255, 255, 255, 0.85); /* Półprzezroczyste białe tło */
+            padding: 15px; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
         .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; display: inline-block; }
         button { padding: 10px; background-color: #0078d4; color: white; border: none; border-radius: 5px; cursor: pointer; }
         button:hover { background-color: #005bb5; }
+        .user-info { 
+            margin-bottom: 20px; 
+            background-color: rgba(255, 255, 255, 0.85); /* Półprzezroczyste białe tło */
+            padding: 10px; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
+    <div class="user-info">
+        <h3>Witaj, {{ username }}!</h3>
+    </div>
     <h1>Edytuj wydatek</h1>
     <a href="{{ url_for('home') }}" class="button">Powrót do listy</a>
     <form method="POST">
