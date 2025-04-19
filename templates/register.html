@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f0f0f0; }
+        h1 { color: #0078d4; }
+        form { margin: 20px 0; }
+        .button { padding: 10px; background-color: #0078d4; color: white; text-decoration: none; border-radius: 5px; display: inline-block; }
+        button { padding: 10px; background-color: #0078d4; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #005bb5; }
+        .message { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Rejestracja</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="POST">
+        <label>Nazwa użytkownika: <input type="text" name="username" required></label>
+        <label>Hasło: <input type="password" name="password" required></label>
+        <button type="submit">Zarejestruj się</button>
+    </form>
+    <a href="{{ url_for('login') }}" class="button">Mam już konto</a>
+</body>
+</html>

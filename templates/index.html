@@ -15,9 +15,14 @@
         .edit-btn:hover { background-color: #218838; }
         .delete-btn { padding: 8px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; }
         .delete-btn:hover { background-color: #c82333; }
+        .user-info { margin-bottom: 20px; }
     </style>
 </head>
 <body>
+    <div class="user-info">
+        <h3>Witaj, {{ username }}!</h3>
+        <a href="{{ url_for('logout') }}" class="button">Wyloguj się</a>
+    </div>
     <h1>Lista wydatków domowych</h1>
     <form method="POST" action="{{ url_for('add_expense') }}">
         <label>Data: <input type="date" name="date" required></label>
